@@ -1,0 +1,3 @@
+# Gitleaks fingerprint ignore file
+# Add leak fingerprints here to ignore specific false positives
+# Format: fingerprint (SHA from gitleaks output)

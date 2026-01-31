@@ -1,0 +1,23 @@
+{
+  "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
+  "name": "hibariba-plugins",
+  "description": "Personal collection of Claude Code plugins - custom tools and curated third-party extensions",
+  "owner": {
+    "name": "hibariba",
+    "email": "your-email@example.com"
+  },
+  "plugins": [
+    {
+      "name": "example-plugin",
+      "description": "Hello world demonstration plugin showing skills and commands - also serves as a copy-paste template",
+      "version": "0.1.0",
+      "author": {
+        "name": "hibariba",
+        "email": "your-email@example.com"
+      },
+      "source": "./plugins/example-plugin",
+      "category": "learning",
+      "homepage": "https://github.com/hibariba/plugins/tree/main/plugins/example-plugin"
+    }
+  ]
+}

@@ -1,0 +1,46 @@
+#!/bin/bash
+# Commit-msg hook: Conventional Commits validation
+# Ensures commit messages follow the conventional format
+
+# Colors for output
+RED='\033[0;31m'
+YELLOW='\033[0;33m'
+NC='\033[0m'
+
+commit_msg_file=$1
+commit_msg=$(cat "$commit_msg_file")
+
+# Conventional Commits pattern
+# type(scope): description
+# type: description
+pattern="^(feat|fix|docs|style|refactor|perf|test|build|ci|chore|revert)(\([a-z0-9-]+\))?: .{1,}"
+
+# Allow merge commits
+if [[ "$commit_msg" =~ ^Merge ]]; then
+    exit 0
+fi
+
+# Allow revert commits
+if [[ "$commit_msg" =~ ^Revert ]]; then
+    exit 0
+fi
+
+if ! [[ "$commit_msg" =~ $pattern ]]; then
+    echo -e "${RED}❌ Invalid commit message format${NC}"
+    echo ""
+    echo "Conventional Commits format required:"
+    echo "  type(scope): description"
+    echo ""
+    echo "Types: feat, fix, docs, style, refactor, perf, test, build, ci, chore, revert"
+    echo ""
+    echo "Examples:"
+    echo "  feat(auth-plugin): add OAuth2 support"
+    echo "  fix: resolve marketplace.json syntax error"
+    echo "  docs: update CLAUDE.md with git workflow"
+    echo "  chore: update external plugins"
+    echo ""
+    echo -e "${YELLOW}Your message:${NC} $commit_msg"
+    exit 1
+fi
+
+exit 0

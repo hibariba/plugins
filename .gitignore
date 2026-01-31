@@ -1,0 +1,36 @@
+# Claude Code
+.claude/*.local.md
+*.local.md
+
+# Node
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Environment & Secrets
+.env
+.env.local
+.env.*.local
+*.pem
+*.key
+*.crt
+credentials.json
+secrets.json
+**/secrets/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Build outputs
+dist/
+build/
+*.log

@@ -1,0 +1,46 @@
+name: Validate Marketplace
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        submodules: recursive
+
+    - name: Validate marketplace.json
+      run: |
+        if ! jq empty .claude-plugin/marketplace.json; then
+          echo "❌ marketplace.json is not valid JSON"
+          exit 1
+        fi
+        echo "✅ marketplace.json is valid"
+
+    - name: Check plugin structure
+      run: |
+        for plugin_dir in plugins/*/; do
+          if [ -d "$plugin_dir" ]; then
+            plugin_name=$(basename "$plugin_dir")
+            if [ ! -f "$plugin_dir/.claude-plugin/plugin.json" ]; then
+              echo "❌ Missing plugin.json for $plugin_name"
+              exit 1
+            fi
+            if ! jq empty "$plugin_dir/.claude-plugin/plugin.json"; then
+              echo "❌ Invalid plugin.json for $plugin_name"
+              exit 1
+            fi
+            echo "✅ $plugin_name structure is valid"
+          fi
+        done
+
+    - name: Verify marketplace entries
+      run: |
+        plugin_count=$(jq '.plugins | length' .claude-plugin/marketplace.json)
+        echo "📦 Found $plugin_count plugins in marketplace"

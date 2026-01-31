@@ -1,0 +1,29 @@
+#!/bin/bash
+# Pre-commit hook: gitleaks secret scanning
+# Prevents commits containing secrets, API keys, or sensitive data
+
+# Colors for output
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+NC='\033[0m' # No Color
+
+echo "Running gitleaks secret scan..."
+
+# Run gitleaks on staged changes (uses gitleaks.toml if present)
+gitleaks protect --staged --verbose --redact --config="$(git rev-parse --show-toplevel)/gitleaks.toml" 2>/dev/null || gitleaks protect --staged --verbose --redact
+
+if [ $? -ne 0 ]; then
+    echo -e "${RED}❌ gitleaks detected secrets in staged files${NC}"
+    echo ""
+    echo "To fix:"
+    echo "  1. Remove the secret from the file"
+    echo "  2. If it's a false positive, add to .gitleaksignore"
+    echo "  3. Use environment variables instead of hardcoded secrets"
+    echo ""
+    echo "To bypass (NOT recommended):"
+    echo "  git commit --no-verify"
+    exit 1
+fi
+
+echo -e "${GREEN}✅ No secrets detected${NC}"
+exit 0
