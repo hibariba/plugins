@@ -1,0 +1,34 @@
+# Files/directories to exclude when merging to main
+# Used by: make publish
+
+# Dev-only directory (everything in it)
+_dev/
+
+# Development tooling
+Makefile
+justfile
+
+# Test infrastructure
+tests/
+__tests__/
+*.test.ts
+*.test.js
+*.spec.ts
+*.spec.js
+coverage/
+.nyc_output/
+
+# CI/CD (if dev-specific)
+# .github/workflows/test.yml
+
+# Development configs
+.editorconfig
+.prettierrc
+.eslintrc*
+tsconfig.json
+jest.config.*
+vitest.config.*
+
+# Development documentation
+docs/internal/
+*.draft.md

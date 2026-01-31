@@ -436,6 +436,28 @@ main          ← Clean, publishing-ready content only
 - **dev**: Active development. All work happens here or in feature branches.
 - **Feature branches**: Create from dev, merge back to dev when complete.
 
+### Dev-Only Artifacts
+
+Some files exist **only on dev** and are excluded when publishing to main:
+
+```
+_dev/                  # Dev-only directory
+├── .mainignore        # List of files to exclude from main
+├── tests/             # Test suites
+├── scripts/           # Automation scripts
+└── README.md          # Explains this pattern
+
+Makefile               # Dev commands (at root, excluded from main)
+```
+
+**What stays on dev only:**
+- `_dev/` directory and all contents
+- `Makefile` / `justfile`
+- Test files (`*.test.ts`, `tests/`, `coverage/`)
+- Dev configs (`.eslintrc`, `tsconfig.json`, etc.)
+
+**Why:** Main is the published marketplace. Users don't need test infrastructure or dev tooling—just clean, working plugins.
+
 **Workflow:**
 ```bash
 # Start new plugin development
@@ -450,10 +472,8 @@ git checkout dev
 git merge feat/my-new-plugin
 git branch -d feat/my-new-plugin
 
-# When dev is ready for publishing
-git checkout main
-git merge dev
-git push origin main
+# When dev is ready for publishing (excludes dev-only artifacts)
+make publish
 ```
 
 ### Conventional Commits (Required)
@@ -577,8 +597,17 @@ All plugins in this marketplace should have:
 | **Enable hooks** | `git config core.hooksPath .githooks` |
 | **Start feature** | `git checkout dev && git checkout -b feat/name` |
 | **Merge to dev** | `git checkout dev && git merge feat/name` |
-| **Publish to main** | `git checkout main && git merge dev` |
+| **Publish to main** | `make publish` (clean merge, excludes dev artifacts) |
 | **Check for secrets** | `gitleaks detect --source . --verbose` |
+
+### Make Commands (dev branch only)
+| Task | Command |
+|------|---------|
+| **Run tests** | `make test` |
+| **Validate JSON** | `make validate` |
+| **Publish to main** | `make publish` |
+| **Sync branches** | `make sync` |
+| **Clean artifacts** | `make clean` |
 
 ### External Plugins
 | Task | Command |
