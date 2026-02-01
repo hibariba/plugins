@@ -228,9 +228,17 @@ async function fetchReferences(links: Link[], outputDir: string): Promise<FetchR
 async function main(): Promise<void> {
   const args = process.argv.slice(2);
 
-  if (args.length < 2 || args.includes('--help') || args.includes('-h')) {
+  // Help flag always exits 0
+  if (args.includes('--help') || args.includes('-h')) {
     printUsage();
-    process.exit(args.length < 2 ? 1 : 0);
+    process.exit(0);
+  }
+
+  // Missing arguments
+  if (args.length < 2) {
+    console.error('Error: Missing required arguments');
+    printUsage();
+    process.exit(1);
   }
 
   const jsonFile = args[0];
