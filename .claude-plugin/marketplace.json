@@ -30,6 +30,17 @@
       "source": "./plugins/llmstxt",
       "category": "productivity",
       "homepage": "https://github.com/hibariba/plugins/tree/main/plugins/llmstxt"
+    },
+    {
+      "name": "retrospective",
+      "description": "Systematic retrospectives after milestones or blockers to capture learnings and improve CLAUDE.md documentation",
+      "version": "0.1.0",
+      "author": {
+        "name": "hibariba"
+      },
+      "source": "./plugins/retrospective",
+      "category": "productivity",
+      "homepage": "https://github.com/hibariba/plugins/tree/main/plugins/retrospective"
     }
   ]
 }
