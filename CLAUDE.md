@@ -443,6 +443,15 @@ Choose the most appropriate category:
 - **Release:** Semantic versioning, tag releases, changelog from commits
 - **Enforce:** Commit lint, gitleaks, correct `.gitignore`, no secrets
 
+### Branch Strategy
+
+| Location | Branch | Examples |
+|----------|--------|----------|
+| `plugins/*` | Feature branch | `feat/my-plugin`, `fix/plugin-bug` |
+| Everything else | Main directly | CLAUDE.md, README, marketplace.json, .githooks/ |
+
+**Rule:** Plugin development requires a branch. Repo maintenance can commit to main.
+
 ### Local Setup (Required)
 
 After cloning, enable git hooks:
