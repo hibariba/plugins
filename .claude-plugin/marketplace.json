@@ -18,6 +18,18 @@
       "source": "./plugins/example-plugin",
       "category": "learning",
       "homepage": "https://github.com/hibariba/plugins/tree/main/plugins/example-plugin"
+    },
+    {
+      "name": "llmstxt",
+      "description": "Convert llms.txt URLs into Claude Code skills with all referenced documentation",
+      "version": "1.0.0",
+      "author": {
+        "name": "hibariba",
+        "url": "https://github.com/hibariba"
+      },
+      "source": "./plugins/llmstxt",
+      "category": "productivity",
+      "homepage": "https://github.com/hibariba/plugins/tree/main/plugins/llmstxt"
     }
   ]
 }

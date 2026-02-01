@@ -1,0 +1,9 @@
+{
+  "name": "llmstxt",
+  "version": "1.0.0",
+  "description": "Tools for working with llms.txt files - the standard for LLM-friendly documentation",
+  "author": {
+    "name": "hibariba",
+    "url": "https://github.com/hibariba"
+  }
+}
