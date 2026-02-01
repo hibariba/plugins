@@ -417,155 +417,43 @@ Choose the most appropriate category:
 - **Agents:** `kebab-case.md` (my-agent.md)
 - **Hooks:** `kebab-case.ts` (my-hook.ts)
 
-## Git Workflow
+## Git
 
-### Branching Strategy
+- **Branch:** `main` protected, always releasable. Use `feat/*`, `fix/*`, `chore/*`
+- **Commit:** Atomic, Conventional Commits, imperative mood, ≤72 char, no WIP
+- **Merge:** Rebase before merge, squash to main, delete branch after
+- **History:** Never rewrite `main`. Rewrite feature branches only before merge
+- **Release:** Semantic versioning, tag releases, changelog from commits
+- **Enforce:** Commit lint, gitleaks, correct `.gitignore`, no secrets
 
-```
-main          ← Clean, publishing-ready content only
-  │
-  └── dev     ← Development work, artifacts, WIP
-        │
-        └── feat/plugin-name   ← Feature branches for new plugins
-        └── fix/issue-name     ← Bug fix branches
-        └── docs/topic         ← Documentation branches
-```
+### Local Setup (Required)
 
-**Rules:**
-- **main**: Always deployable. Only merge from dev when ready to publish.
-- **dev**: Active development. All work happens here or in feature branches.
-- **Feature branches**: Create from dev, merge back to dev when complete.
-
-### Dev-Only Artifacts
-
-Some files exist **only on dev** and are excluded when publishing to main:
-
-```
-_dev/                  # Dev-only directory
-├── .mainignore        # List of files to exclude from main
-├── tests/             # Test suites
-├── scripts/           # Automation scripts
-└── README.md          # Explains this pattern
-
-Makefile               # Dev commands (at root, excluded from main)
-```
-
-**What stays on dev only:**
-- `_dev/` directory and all contents
-- `Makefile` / `justfile`
-- Test files (`*.test.ts`, `tests/`, `coverage/`)
-- Dev configs (`.eslintrc`, `tsconfig.json`, etc.)
-
-**Why:** Main is the published marketplace. Users don't need test infrastructure or dev tooling—just clean, working plugins.
-
-**Workflow:**
-```bash
-# Start new plugin development
-git checkout dev
-git checkout -b feat/my-new-plugin
-
-# Work on feature...
-git add . && git commit -m "feat(my-plugin): add initial structure"
-
-# When complete, merge to dev
-git checkout dev
-git merge feat/my-new-plugin
-git branch -d feat/my-new-plugin
-
-# When dev is ready for publishing (excludes dev-only artifacts)
-make publish
-```
-
-### Conventional Commits (Required)
-
-All commits must follow the Conventional Commits format:
-
-```
-type(scope): description
-
-[optional body]
-
-[optional footer]
-```
-
-**Types:**
-| Type | Use For |
-|------|---------|
-| `feat` | New feature or plugin |
-| `fix` | Bug fix |
-| `docs` | Documentation only |
-| `style` | Formatting, no code change |
-| `refactor` | Code change, no new feature or fix |
-| `perf` | Performance improvement |
-| `test` | Adding/updating tests |
-| `build` | Build system, dependencies |
-| `ci` | CI/CD configuration |
-| `chore` | Maintenance, updates |
-| `revert` | Reverting previous commit |
-
-**Examples:**
-```bash
-# Good - follows format
-git commit -m "feat(auth-plugin): add OAuth2 authentication support"
-git commit -m "fix: resolve marketplace.json syntax error"
-git commit -m "docs: update CLAUDE.md with git workflow"
-git commit -m "chore: update external plugins to latest"
-
-# Bad - doesn't follow format
-git commit -m "Add authentication"      # Missing type
-git commit -m "fix stuff"               # Too vague
-git commit -m "WIP"                     # Not descriptive
-```
-
-### Git Hooks Setup
-
-This repository uses `.githooks/` for automated validation:
+After cloning, enable git hooks:
 
 ```bash
-# Enable the hooks (run once after cloning)
 git config core.hooksPath .githooks
 ```
 
-**Included Hooks:**
-- **pre-commit**: Runs gitleaks to prevent committing secrets
-- **commit-msg**: Validates Conventional Commits format
+This enables pre-commit checks: plugin.json validation, frontmatter linting, gitleaks.
 
-**Bypassing (not recommended):**
+**Requires:** `jq`, `gitleaks` (install: `brew install jq gitleaks`)
+
+**Verify:** `git config core.hooksPath` should return `.githooks`
+
+**Quick Check & Fix:**
 ```bash
-git commit --no-verify -m "message"  # Skip hooks
+# Verify hooks are configured and files exist
+[[ "$(git config core.hooksPath)" == ".githooks" ]] && [ -f .githooks/pre-commit ] && echo "✅ Hooks ready" || {
+  git config core.hooksPath .githooks
+  git checkout HEAD -- .githooks/
+  chmod +x .githooks/*
+  echo "✅ Hooks restored and configured"
+}
 ```
 
-### Best Practices
+## Dev Notes
 
-**Keep commits atomic:**
-- One logical change per commit
-- If you can split it, split it
-- Commit often, push when ready
-
-**Write meaningful messages:**
-- Describe what AND why
-- Use imperative mood: "Add feature" not "Added feature"
-- Keep first line under 72 characters
-
-**Keep main clean:**
-- Never commit directly to main
-- All changes go through dev first
-- Only merge publishing-ready content
-
-**Feature branch hygiene:**
-- Delete branches after merging
-- Keep branches short-lived
-- Rebase on dev before merging if needed
-
-**Before pushing:**
-```bash
-# Validate JSON files
-jq empty .claude-plugin/marketplace.json
-jq empty plugins/*/.claude-plugin/plugin.json
-
-# Check for secrets
-gitleaks detect --source . --verbose
-```
+- **Temp docs:** Use `*.local.md` (gitignored) for untracked development notes
 
 ## Quality Standards
 
@@ -582,7 +470,6 @@ All plugins in this marketplace should have:
 
 ## Quick Reference
 
-### Plugin Development
 | Task | Command |
 |------|---------|
 | **Create plugin** | `cp -r plugins/example-plugin plugins/name` |
@@ -590,28 +477,6 @@ All plugins in this marketplace should have:
 | **Test with debug** | `cc --debug --plugin-dir plugins/name` |
 | **Validate plugin.json** | `jq empty plugins/name/.claude-plugin/plugin.json` |
 | **Validate marketplace** | `jq empty .claude-plugin/marketplace.json` |
-
-### Git Workflow
-| Task | Command |
-|------|---------|
-| **Enable hooks** | `git config core.hooksPath .githooks` |
-| **Start feature** | `git checkout dev && git checkout -b feat/name` |
-| **Merge to dev** | `git checkout dev && git merge feat/name` |
-| **Publish to main** | `make publish` (clean merge, excludes dev artifacts) |
-| **Check for secrets** | `gitleaks detect --source . --verbose` |
-
-### Make Commands (dev branch only)
-| Task | Command |
-|------|---------|
-| **Run tests** | `make test` |
-| **Validate JSON** | `make validate` |
-| **Publish to main** | `make publish` |
-| **Sync branches** | `make sync` |
-| **Clean artifacts** | `make clean` |
-
-### External Plugins
-| Task | Command |
-|------|---------|
 | **Add external plugin** | `git submodule add URL external_plugins/name` |
 | **Update externals** | `git submodule update --remote` |
 | **Remove submodule** | `git submodule deinit -f external_plugins/name` |

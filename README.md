@@ -47,18 +47,6 @@ cd plugins/my-new-plugin
 
 For detailed development workflows, component patterns, and best practices, see **[CLAUDE.md](CLAUDE.md)** - the complete developer guide.
 
-## Developer Setup
-
-After cloning, enable git hooks for secret scanning and commit validation:
-
-```bash
-git config core.hooksPath .githooks
-```
-
-This enables:
-- **Pre-commit**: gitleaks secret scanning
-- **Commit-msg**: Conventional Commits validation
-
 ## Categories
 
 Plugins are organized by category for easy discovery:

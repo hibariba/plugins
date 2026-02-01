@@ -1,8 +1,0 @@
-{
-  "plugins": {
-    "autoload": ["example-plugin"],
-    "marketplace": {
-      "default": "hibariba-plugins"
-    }
-  }
-}
