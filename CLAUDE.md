@@ -504,6 +504,7 @@ This enables pre-commit checks: plugin.json validation, frontmatter linting, git
 ## Dev Notes
 
 - **Temp docs:** Use `*.local.md` (gitignored) for untracked development notes
+- **Writing style:** Apply `/high-signal-technical-style-guide` for docs—TL;DR first, quantify claims, delete filler
 
 ## Script Development Patterns
 
