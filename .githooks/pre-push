@@ -1,0 +1,28 @@
+#!/bin/bash
+# Pre-push hook: Only allow pushing main branch to remote
+# All development happens locally on dev/feature branches, merge to main before pushing
+
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+NC='\033[0m'
+
+# Read the branches being pushed
+while read local_ref local_sha remote_ref remote_sha; do
+    branch=$(echo "$local_ref" | sed 's|refs/heads/||')
+
+    if [ "$branch" != "main" ]; then
+        echo -e "${RED}❌ Cannot push branch '$branch' to remote${NC}"
+        echo ""
+        echo "Only 'main' can be pushed. Merge your changes to main first:"
+        echo "  git checkout main"
+        echo "  git merge $branch"
+        echo "  git push origin main"
+        echo ""
+        echo "To bypass (NOT recommended):"
+        echo "  git push --no-verify"
+        exit 1
+    fi
+done
+
+echo -e "${GREEN}✅ Pushing main branch${NC}"
+exit 0

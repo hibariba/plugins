@@ -419,7 +419,8 @@ Choose the most appropriate category:
 
 ## Git
 
-- **Branch:** `main` protected, always releasable. Use `feat/*`, `fix/*`, `chore/*`
+- **Branch:** `main` is the only branch pushed to remote. Use `dev`, `feat/*`, `fix/*` locally
+- **Push:** Only push `main`. Merge dev/feature branches to main before pushing
 - **Commit:** Atomic, Conventional Commits, imperative mood, ≤72 char, no WIP
 - **Merge:** Rebase before merge, squash to main, delete branch after
 - **History:** Never rewrite `main`. Rewrite feature branches only before merge
