@@ -71,6 +71,11 @@ Write all content (skills, commands, agents) as instructions TO Claude, not docu
 - ❌ "This skill searches the codebase..."
 - Use imperative style, direct commands
 
+### Skills Before Action
+- Check for applicable skills BEFORE any response or codebase exploration
+- Process skills (brainstorming, debugging) come before implementation skills
+- Even 1% chance of applicability = invoke the skill first
+
 ### Plugin Development Rules
 
 **Always a Plugin:**
