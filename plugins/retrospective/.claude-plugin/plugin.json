@@ -1,0 +1,8 @@
+{
+  "name": "retrospective",
+  "version": "0.1.0",
+  "description": "Systematic retrospectives after milestones or blockers to capture learnings and improve CLAUDE.md documentation",
+  "author": {
+    "name": "hibariba"
+  }
+}
