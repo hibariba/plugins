@@ -71,6 +71,22 @@ Write all content (skills, commands, agents) as instructions TO Claude, not docu
 - ❌ "This skill searches the codebase..."
 - Use imperative style, direct commands
 
+### Plugin Development Rules
+
+**Always a Plugin:**
+- Even a single skill must be developed as a full plugin
+- Use the template: `cp -r plugins/example-plugin plugins/my-plugin`
+- Remove unused directories, but keep `.claude-plugin/plugin.json`
+
+**Before Creating:**
+- Check `marketplace.json` for similar plugins (avoid duplicates)
+- Third-party plugins may be listed but not present in `plugins/`
+
+**Directory Ownership:**
+- `plugins/` — Only my plugins (developed and maintained here)
+- `marketplace.json` — Can reference both local and external plugins
+- Third-party plugins are referenced by URL, not stored in repo
+
 ## Repository Structure
 
 ```
