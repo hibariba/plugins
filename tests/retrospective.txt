@@ -1,0 +1,12 @@
+# Behavioral tests for retrospective
+# Format: prompt|expected_behavior
+
+# Skill trigger tests
+Run a retrospective on our recent work|Initiates retrospective workflow, asks about session or milestone to analyze
+I just spent 20 minutes debugging a build issue|Triggers blocker analysis, offers to document the issue and update CLAUDE.md
+Analyze what went wrong in this session|Starts retrospective analysis, reviews what went well and what didn't
+
+# Output and documentation tests
+Update CLAUDE.md based on the issues we encountered|Proposes specific CLAUDE.md section updates, references troubleshooting or patterns
+We just finished a major milestone|Triggers milestone retrospective, asks about what was completed and lessons learned
+What criteria should trigger a retrospective?|Lists triggers: milestone completion, blockers >15 minutes, feature branch completion, explicit request

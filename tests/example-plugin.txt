@@ -1,0 +1,12 @@
+# Behavioral tests for example-plugin
+# Format: prompt|expected_behavior
+
+# Skill trigger tests
+Tell me about example workflows|Mentions example-skill, shows skill loaded, references plugin templates or workflow patterns
+Show me an example plugin template|References example-plugin structure, mentions skills and commands components
+How do I create a plugin?|Provides steps to copy example-plugin, mentions updating plugin.json
+
+# Command tests
+/example-plugin:example-command|Outputs "Hello, World!" greeting with example command information
+/example-plugin:example-command --name Alice|Outputs "Hello, Alice!" personalized greeting
+/example-plugin:example-command --name Bob --verbose|Shows verbose output with argument parsing details and emoji status indicators

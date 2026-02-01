@@ -1,0 +1,11 @@
+# Behavioral tests for llmstxt
+# Format: prompt|expected_behavior
+
+# Skill trigger tests
+Create a skill from an llms.txt URL|Asks for the llms.txt URL, mentions skill creation workflow
+Convert llms.txt to a Claude Code skill|References the conversion process, asks about output location preference
+Explain what llms.txt format is|Describes llms.txt as documentation format for LLMs, mentions URLs and references
+
+# Workflow tests
+Generate skill from documentation URL ending in llms.txt|Follows multi-step workflow: get URL, ask output location, parse and save
+What happens if the llms.txt URL is invalid?|Mentions error handling, validation, or graceful failure for bad URLs

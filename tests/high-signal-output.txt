@@ -1,0 +1,12 @@
+# Behavioral tests for high-signal-output
+# Format: prompt|expected_behavior
+
+# Style guide skill triggers
+How should I format my technical documentation?|References High-Entropy Rule, BLUF structure, or mentions deleting low-value content
+What's the difference between verbose and concise writing?|Discusses maximizing reader utility per word, removing filler, or information density
+Summarize the key principles of high-signal writing|Mentions answer-first, active voice, one sentence when possible, or no filler adjectives
+
+# Technical document application
+Help me improve this design doc: "This is a very important feature that will be really helpful for users"|Suggests removing vague adjectives like "very important" and "really helpful", recommends specific measurable claims
+Write a brief RFC summary for adding user authentication|Uses BLUF structure, leads with conclusion, uses active voice, avoids filler
+Create a README introduction for a CLI tool|Produces concise intro, leads with what the tool does, avoids unnecessary background

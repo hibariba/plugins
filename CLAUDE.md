@@ -305,6 +305,34 @@ jq empty .claude-plugin/marketplace.json
 # Both should exit silently (no output = valid)
 ```
 
+### Behavioral Evaluation
+
+Beyond structural validation, test plugin behavior with CC as judge:
+
+```bash
+./tests/eval-plugin.sh plugins/my-plugin           # Run behavioral tests
+./tests/eval-plugin.sh --verbose plugins/my-plugin # Show detailed output
+./tests/eval-plugin.sh --dry-run plugins/my-plugin # Preview tests without running
+```
+
+**Test File Location:** `tests/plugin-name.txt` (NOT inside plugin directory)
+
+**Isolation:** Tests are stored outside the plugin directory so they're not auto-loaded with plugin content. The test agent runs in a separate session from the judge agent. Note: Full filesystem isolation isn't possible with CC—this is behavioral testing, not adversarial testing.
+
+**Format:**
+```
+# Comment lines start with #
+prompt text here|expected behavior description
+another prompt|what the response should demonstrate
+```
+
+Each test runs the prompt against the plugin, then uses a separate CC instance as judge to evaluate if the response matches expected behavior.
+
+**Model Strategy:**
+- Test agent: Haiku first (fast/cheap) → Sonnet fallback on failure
+- Judge agent: Always Sonnet (reliable judgment)
+- Bug reports generated at `tests/reports/` for failed tests
+
 ### Pre-Publish Checklist
 
 Before committing a new plugin:
@@ -317,6 +345,7 @@ Before committing a new plugin:
 - [ ] Prerequisites/dependencies documented
 - [ ] Author attribution included
 - [ ] Git commit message is clear and specific
+- [ ] Behavioral tests pass (`./tests/eval-plugin.sh`)
 
 ## Common Workflows
 
@@ -532,7 +561,7 @@ This enables pre-commit checks: plugin.json validation, frontmatter linting, git
 ### Pre-Release Validation
 
 ```bash
-./scripts/validate-plugin.sh plugins/my-plugin/  # Full plugin validation
+./tests/validate-plugin.sh plugins/my-plugin/  # Full plugin validation
 jq empty plugins/my-plugin/.claude-plugin/plugin.json  # Validate JSON
 ```
 
@@ -561,6 +590,7 @@ All plugins in this marketplace should have:
 | **Add external plugin** | `git submodule add URL external_plugins/name` |
 | **Update externals** | `git submodule update --remote` |
 | **Remove submodule** | `git submodule deinit -f external_plugins/name` |
+| **Run behavioral tests** | `./tests/eval-plugin.sh plugins/name` |
 
 ## Resources
 
