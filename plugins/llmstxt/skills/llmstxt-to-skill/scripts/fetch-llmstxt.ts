@@ -4,10 +4,12 @@
  *
  * Fetches an llms.txt URL and parses it into a structured format.
  *
- * Usage: bun run fetch-llmstxt.ts <url>
+ * Usage: bun run fetch-llmstxt.ts <url> [output-file]
  *
- * Output: JSON with title, derived skill name, and array of links
+ * If output-file is provided, writes JSON there. Otherwise prints to stdout.
  */
+
+import { writeFile } from 'fs/promises';
 
 interface Link {
   name: string;
@@ -22,15 +24,12 @@ interface LlmsTxtResult {
 }
 
 async function fetchLlmsTxt(url: string): Promise<LlmsTxtResult> {
-  // Fetch the llms.txt content
   const response = await fetch(url);
   if (!response.ok) {
     throw new Error(`Failed to fetch ${url}: ${response.status} ${response.statusText}`);
   }
 
   const content = await response.text();
-
-  // Parse the content
   const lines = content.split('\n');
 
   // Extract title from first heading
@@ -52,7 +51,6 @@ async function fetchLlmsTxt(url: string): Promise<LlmsTxtResult> {
     .replace(/^-|-$/g, '');
 
   // Parse links in format: - [Title](url): description
-  // or: - [Title](url)
   const links: Link[] = [];
   const linkRegex = /^-\s*\[([^\]]+)\]\(([^)]+)\)(?::\s*(.*))?$/;
 
@@ -60,8 +58,6 @@ async function fetchLlmsTxt(url: string): Promise<LlmsTxtResult> {
     const match = line.match(linkRegex);
     if (match) {
       const [, linkTitle, linkUrl, description] = match;
-
-      // Derive name from URL or title
       const urlPath = new URL(linkUrl).pathname;
       const fileName = urlPath.split('/').pop() || '';
       const name = fileName.replace(/\.md$/, '') ||
@@ -75,24 +71,28 @@ async function fetchLlmsTxt(url: string): Promise<LlmsTxtResult> {
     }
   }
 
-  return {
-    title,
-    skillName,
-    links
-  };
+  return { title, skillName, links };
 }
 
-// Main execution
+// Main
 const url = process.argv[2];
+const outputFile = process.argv[3];
 
 if (!url) {
-  console.error('Usage: bun run fetch-llmstxt.ts <url>');
+  console.error('Usage: bun run fetch-llmstxt.ts <url> [output-file]');
   process.exit(1);
 }
 
 try {
   const result = await fetchLlmsTxt(url);
-  console.log(JSON.stringify(result, null, 2));
+  const json = JSON.stringify(result, null, 2);
+
+  if (outputFile) {
+    await writeFile(outputFile, json, 'utf-8');
+    console.log(`Wrote to ${outputFile}`);
+  } else {
+    console.log(json);
+  }
 } catch (error) {
   console.error(`Error: ${error instanceof Error ? error.message : error}`);
   process.exit(1);

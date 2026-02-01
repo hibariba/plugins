@@ -2,19 +2,15 @@
 /**
  * generate-skill.ts
  *
- * Generates a SKILL.md file from fetched references using AI synthesis.
+ * Generates a SKILL.md file from fetched references.
  *
- * Usage: bun run generate-skill.ts <skill-dir> <title> '<links-json>'
+ * Usage: bun run generate-skill.ts <skill-dir> <json-file>
  *
- * Creates SKILL.md in skill-dir with:
- * - Frontmatter with trigger descriptions
- * - AI-synthesized overview
- * - References section
+ * Reads title and links from json-file, creates SKILL.md in skill-dir.
  */
 
 import { readdir, readFile, writeFile } from 'fs/promises';
 import { join } from 'path';
-import { execSync } from 'child_process';
 
 interface Link {
   name: string;
@@ -22,11 +18,14 @@ interface Link {
   description: string;
 }
 
-async function generateSkill(
-  skillDir: string,
-  title: string,
-  links: Link[]
-): Promise<void> {
+async function generateSkill(skillDir: string, jsonFile: string): Promise<void> {
+  // Read the JSON data
+  const jsonContent = await readFile(jsonFile, 'utf-8');
+  const data = JSON.parse(jsonContent);
+
+  const title: string = data.title || 'Untitled';
+  const links: Link[] = data.links || [];
+
   const referencesDir = join(skillDir, 'references');
 
   // Read all reference files to build context
@@ -34,13 +33,13 @@ async function generateSkill(
   try {
     referenceFiles = await readdir(referencesDir);
   } catch {
-    // No references yet, that's okay
+    // No references yet
   }
 
   // Build descriptions from links for trigger phrases
   const topics = links
-    .slice(0, 10) // Use first 10 for trigger phrases
-    .map(l => l.description.split('.')[0]) // First sentence
+    .slice(0, 10)
+    .map(l => l.description.split('.')[0])
     .filter(d => d.length > 0 && d.length < 100);
 
   // Derive skill name
@@ -50,7 +49,6 @@ async function generateSkill(
     .replace(/\s+/g, '-')
     .replace(/-+/g, '-');
 
-  // Build trigger description from topics
   const triggerPhrases = topics.slice(0, 5).join(', ');
 
   // Create reference list
@@ -58,10 +56,9 @@ async function generateSkill(
     .map(l => `- [${l.name}](references/${l.name}.md): ${l.description}`)
     .join('\n');
 
-  // Build summary of what the documentation covers
+  // Categorize links
   const categories = new Map<string, string[]>();
   for (const link of links) {
-    // Categorize by common keywords
     const desc = link.description.toLowerCase();
     if (desc.includes('setup') || desc.includes('install') || desc.includes('start')) {
       categories.set('Getting Started', [...(categories.get('Getting Started') || []), link.name]);
@@ -76,12 +73,10 @@ async function generateSkill(
     }
   }
 
-  // Build category summary
   const categorySummary = Array.from(categories.entries())
     .map(([cat, items]) => `- **${cat}**: ${items.slice(0, 5).join(', ')}${items.length > 5 ? ` (+${items.length - 5} more)` : ''}`)
     .join('\n');
 
-  // Generate the SKILL.md content
   const skillContent = `---
 name: ${skillName}
 description: ${title} documentation and reference. Use when asking about ${triggerPhrases.toLowerCase()}.
@@ -113,7 +108,6 @@ ${referenceList}
 *Generated from llms.txt with ${referenceFiles.length} fetched documents.*
 `;
 
-  // Write the SKILL.md
   const skillPath = join(skillDir, 'SKILL.md');
   await writeFile(skillPath, skillContent, 'utf-8');
 
@@ -125,28 +119,19 @@ ${referenceList}
   }, null, 2));
 }
 
-// Main execution
+// Main
 const skillDir = process.argv[2];
-const title = process.argv[3];
-const linksJson = process.argv[4];
+const jsonFile = process.argv[3];
 
-if (!skillDir || !title || !linksJson) {
-  console.error('Usage: bun run generate-skill.ts <skill-dir> <title> \'<links-json>\'');
+if (!skillDir || !jsonFile) {
+  console.error('Usage: bun run generate-skill.ts <skill-dir> <json-file>');
   console.error('  skill-dir: Directory where skill will be created');
-  console.error('  title: Title from llms.txt');
-  console.error('  links-json: JSON array of links from fetch-llmstxt.ts');
+  console.error('  json-file: Path to JSON file from fetch-llmstxt.ts');
   process.exit(1);
 }
 
 try {
-  const links: Link[] = JSON.parse(linksJson);
-
-  if (!Array.isArray(links)) {
-    throw new Error('Links must be an array');
-  }
-
-  await generateSkill(skillDir, title, links);
-
+  await generateSkill(skillDir, jsonFile);
 } catch (error) {
   console.error(`Error: ${error instanceof Error ? error.message : error}`);
   process.exit(1);

@@ -26,16 +26,13 @@ Use AskUserQuestion:
   2. `~/.claude/skills/` - Global, available everywhere
   3. Custom path...
 
-### Step 3: Parse llms.txt
+### Step 3: Parse llms.txt and Save to File
 
 ```bash
-bun run ${CLAUDE_PLUGIN_ROOT}/skills/llmstxt-to-skill/scripts/fetch-llmstxt.ts "URL"
+bun run ${CLAUDE_PLUGIN_ROOT}/skills/llmstxt-to-skill/scripts/fetch-llmstxt.ts "URL" /tmp/llmstxt-data.json
 ```
 
-Save output to variable. Returns:
-```json
-{"title": "...", "skillName": "...", "links": [...]}
-```
+This saves the parsed data to a temp file. Read the file to get title and skillName.
 
 ### Step 4: Create Directory
 
@@ -46,20 +43,24 @@ mkdir -p "OUTPUT_PATH/SKILL_NAME/references"
 ### Step 5: Fetch References
 
 ```bash
-bun run ${CLAUDE_PLUGIN_ROOT}/skills/llmstxt-to-skill/scripts/fetch-references.ts 'JSON' "OUTPUT_PATH/SKILL_NAME/references"
+bun run ${CLAUDE_PLUGIN_ROOT}/skills/llmstxt-to-skill/scripts/fetch-references.ts /tmp/llmstxt-data.json "OUTPUT_PATH/SKILL_NAME/references"
 ```
 
 Report: "Fetching X references..." then "Fetched X/Y (Z warnings)"
 
 ### Step 6: Generate SKILL.md
 
-Extract links array from JSON, then:
 ```bash
-bun run ${CLAUDE_PLUGIN_ROOT}/skills/llmstxt-to-skill/scripts/generate-skill.ts "OUTPUT_PATH/SKILL_NAME" "TITLE" 'LINKS_JSON'
+bun run ${CLAUDE_PLUGIN_ROOT}/skills/llmstxt-to-skill/scripts/generate-skill.ts "OUTPUT_PATH/SKILL_NAME" /tmp/llmstxt-data.json
 ```
 
-### Step 7: Report Success
+### Step 7: Cleanup and Report
 
+```bash
+rm /tmp/llmstxt-data.json
+```
+
+Report success:
 ```
 Created skill: SKILL_NAME
 Location: OUTPUT_PATH/SKILL_NAME/
@@ -84,10 +85,12 @@ User: Create a skill from https://code.claude.com/docs/llms.txt
 
 [Ask output location] → User: .claude/skills/
 
-Parsing llms.txt... found 52 links
+Parsing llms.txt... saved to /tmp/llmstxt-data.json
+Found: Claude Code Docs with 52 links
 Creating .claude/skills/claude-code-docs/references/
 Fetching references... 52/52 complete
 Generating SKILL.md...
+Cleanup temp file...
 
 Created skill: claude-code-docs
 Location: .claude/skills/claude-code-docs/

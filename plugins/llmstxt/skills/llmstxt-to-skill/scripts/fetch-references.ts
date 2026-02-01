@@ -4,13 +4,13 @@
  *
  * Downloads all linked documents from an llms.txt parse result.
  *
- * Usage: bun run fetch-references.ts '<json>' <output-dir>
+ * Usage: bun run fetch-references.ts <json-file> <output-dir>
  *
- * Input: JSON string with links array from fetch-llmstxt.ts
+ * Input: Path to JSON file from fetch-llmstxt.ts
  * Output: Downloads files to output-dir, prints summary
  */
 
-import { mkdir, writeFile } from 'fs/promises';
+import { mkdir, writeFile, readFile } from 'fs/promises';
 import { join } from 'path';
 
 interface Link {
@@ -26,7 +26,6 @@ interface FetchResult {
 }
 
 async function fetchReferences(links: Link[], outputDir: string): Promise<FetchResult> {
-  // Ensure output directory exists
   await mkdir(outputDir, { recursive: true });
 
   const result: FetchResult = {
@@ -35,7 +34,6 @@ async function fetchReferences(links: Link[], outputDir: string): Promise<FetchR
     warnings: []
   };
 
-  // Fetch each link with concurrency limit
   const concurrency = 5;
   const chunks: Link[][] = [];
 
@@ -58,7 +56,6 @@ async function fetchReferences(links: Link[], outputDir: string): Promise<FetchR
         const fileName = `${link.name}.md`;
         const filePath = join(outputDir, fileName);
 
-        // Add frontmatter with source info
         const fileContent = `---
 source: ${link.url}
 description: ${link.description}
@@ -80,19 +77,20 @@ ${content}`;
   return result;
 }
 
-// Main execution
-const jsonInput = process.argv[2];
+// Main
+const jsonFile = process.argv[2];
 const outputDir = process.argv[3];
 
-if (!jsonInput || !outputDir) {
-  console.error('Usage: bun run fetch-references.ts \'<json>\' <output-dir>');
-  console.error('  json: JSON string with links array from fetch-llmstxt.ts');
+if (!jsonFile || !outputDir) {
+  console.error('Usage: bun run fetch-references.ts <json-file> <output-dir>');
+  console.error('  json-file: Path to JSON file from fetch-llmstxt.ts');
   console.error('  output-dir: Directory to save fetched documents');
   process.exit(1);
 }
 
 try {
-  const data = JSON.parse(jsonInput);
+  const jsonContent = await readFile(jsonFile, 'utf-8');
+  const data = JSON.parse(jsonContent);
   const links: Link[] = data.links || data;
 
   if (!Array.isArray(links)) {
@@ -103,7 +101,6 @@ try {
 
   const result = await fetchReferences(links, outputDir);
 
-  // Output summary as JSON
   console.log(JSON.stringify({
     total: links.length,
     success: result.success,
