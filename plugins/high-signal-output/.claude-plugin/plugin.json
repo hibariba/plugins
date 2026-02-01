@@ -1,0 +1,9 @@
+{
+  "name": "high-signal-output",
+  "version": "1.0.0",
+  "description": "High-signal writing style guides for concise LLM responses and technical documentation",
+  "author": {
+    "name": "hibariba",
+    "url": "https://github.com/hibariba/style-guides"
+  }
+}
