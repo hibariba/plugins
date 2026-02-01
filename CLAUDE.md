@@ -340,6 +340,30 @@ git commit -m "Add my-plugin"
 git push
 ```
 
+### Finalize Plugin
+
+After plugin creation and local testing, publish to marketplace:
+
+```bash
+# 1. Add marketplace entry (edit .claude-plugin/marketplace.json with new plugin)
+
+# 2. Validate both JSONs
+jq empty plugins/my-plugin/.claude-plugin/plugin.json && \
+jq empty .claude-plugin/marketplace.json && \
+echo "✅ Valid JSON"
+
+# 3. Commit plugin and marketplace together
+git add plugins/my-plugin .claude-plugin/marketplace.json
+git commit -m "feat: add my-plugin"
+
+# 4. Add marketplace entry separately (cleaner history)
+git add .claude-plugin/marketplace.json
+git commit -m "docs: add my-plugin to marketplace"
+
+# 5. Push
+git push
+```
+
 ### Add External Plugin
 
 ```bash
@@ -480,6 +504,31 @@ This enables pre-commit checks: plugin.json validation, frontmatter linting, git
 ## Dev Notes
 
 - **Temp docs:** Use `*.local.md` (gitignored) for untracked development notes
+
+## Script Development Patterns
+
+**File-based IPC** — Never pass JSON/user content via CLI args; shell escaping breaks. Use temp files.
+**Validation sequence** — Check existence → permissions → format → semantics → then process
+**Observable execution** — stdout=data, stderr=progress/errors, exit codes=machine status
+**Timeout all network** — Always use AbortController with 30s default on fetch()
+**Graceful degradation** — Promise.allSettled > Promise.all; partial success beats total failure
+**Platform paths** — Use path.join(), never string concat with `/`
+
+### Critical Antipatterns (Block Release)
+
+| Pattern | Why |
+|---------|-----|
+| `JSON.parse(process.argv[` | Shell escaping breaks on quotes/apostrophes |
+| `fetch()` without timeout | Hangs forever on network issues |
+| Missing `existsSync` before file ops | Undefined behavior |
+| Hardcoded `/tmp`, `/Users/` | Platform-specific failure |
+
+### Pre-Release Validation
+
+```bash
+./scripts/validate-plugin.sh plugins/my-plugin/  # Full plugin validation
+jq empty plugins/my-plugin/.claude-plugin/plugin.json  # Validate JSON
+```
 
 ## Quality Standards
 
