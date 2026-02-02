@@ -3,14 +3,8 @@
   "version": "1.0.0",
   "description": "Automated workflow agents for plugin development: test generation, documentation, marketplace management, releases, migrations, and dependency analysis",
   "author": {
-    "name": "Plugin Marketplace",
-    "email": "plugins@example.com"
+    "name": "hibariba",
+    "email": "hibariba@gmail.com"
   },
-  "components": {
-    "skills": false,
-    "commands": false,
-    "agents": true,
-    "hooks": true,
-    "mcp": false
-  }
+  "homepage": "https://github.com/hibariba/plugins/tree/main/plugins/plugin-workflow"
 }
