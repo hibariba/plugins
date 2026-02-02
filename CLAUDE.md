@@ -98,6 +98,11 @@ Write all content (skills, commands, agents) as instructions TO Claude, not docu
 hibariba-plugins/
 ├── .claude-plugin/
 │   └── marketplace.json           # Plugin catalog
+├── .github/                        # Issue management & CI/CD
+│   ├── ISSUE_TEMPLATE/            # Bug/feature/feedback forms
+│   ├── workflows/                 # Automation workflows
+│   ├── labels.yml                 # Label definitions
+│   └── README.md                  # Issue system docs
 ├── plugins/                        # Your custom plugins
 │   └── example-plugin/            # Copy this as template
 │       ├── .claude-plugin/
@@ -491,6 +496,48 @@ Choose the most appropriate category:
 - **Agents:** `kebab-case.md` (my-agent.md)
 - **Hooks:** `kebab-case.ts` (my-hook.ts)
 
+## Issue Management
+
+This repository uses GitHub's issue forms and automated workflows for managing bugs, features, and feedback.
+
+### For Users
+
+**Submit issues via templates:**
+- 🐛 Bug Report (`1-bug.yml`) - Report broken functionality
+- ✨ Feature Request (`2-feature.yml`) - Suggest new features
+- 💬 Feedback (`3-feedback.yml`) - Share general feedback
+
+Templates enforce structure and collect required information upfront.
+
+**Best practices:**
+- Search existing issues before creating new ones
+- Provide all requested information in the template
+- Use descriptive titles: `[Bug]: Login fails on Safari` not `bug`
+- Link PRs to issues using `Fixes #123` or `Closes #456`
+
+### For Maintainers
+
+**Automated workflows:**
+- **Triage** - Auto-labels new issues based on keywords
+- **Stale management** - Closes inactive issues (60 days) and PRs (45 days)
+- **PR checks** - Validates issue links and auto-labels by changed files
+- **Welcome bot** - Greets first-time contributors
+
+**Manual triage process:**
+1. Review issues with `triage` label
+2. Add priority label (`priority:high/medium/low`)
+3. Add component labels (`plugin:name`, `docs`, `testing`)
+4. Set status (`in-progress`, `blocked`, `needs-info`, `wontfix`)
+5. Assign to milestone if applicable
+
+**Label categories:**
+- **Type**: `bug`, `feature`, `feedback`, `docs`, `testing`
+- **Priority**: `priority:high`, `priority:medium`, `priority:low`
+- **Status**: `triage`, `in-progress`, `blocked`, `needs-info`, `wontfix`
+- **Component**: `plugin`, `plugin:*`, `marketplace`, `ci/cd`
+
+See `.github/README.md` for detailed documentation.
+
 ## Git
 
 - **Branch:** `main` is the only branch pushed to remote. Use `dev`, `feat/*`, `fix/*` locally
@@ -591,6 +638,8 @@ All plugins in this marketplace should have:
 | **Update externals** | `git submodule update --remote` |
 | **Remove submodule** | `git submodule deinit -f external_plugins/name` |
 | **Run behavioral tests** | `./tests/eval-plugin.sh plugins/name` |
+| **Sync issue labels** | `npx github-label-sync --labels .github/labels.yml owner/repo` |
+| **Test workflow locally** | `act issues -e test-event.json` (requires [act](https://github.com/nektos/act)) |
 
 ## Resources
 

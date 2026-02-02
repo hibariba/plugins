@@ -1,0 +1,94 @@
+# Label definitions for GitHub Issues
+# These can be synced using github-label-sync or manually created
+
+# Type labels
+- name: bug
+  color: d73a4a
+  description: Something isn't working
+
+- name: feature
+  color: a2eeef
+  description: New feature or request
+
+- name: feedback
+  color: d4c5f9
+  description: General feedback or suggestions
+
+- name: docs
+  color: 0075ca
+  description: Documentation improvements
+
+- name: testing
+  color: 1d76db
+  description: Testing, CI/CD, or quality assurance
+
+# Priority labels
+- name: priority:high
+  color: ff0000
+  description: High priority, needs immediate attention
+
+- name: priority:medium
+  color: ff9900
+  description: Medium priority
+
+- name: priority:low
+  color: ffcc00
+  description: Low priority
+
+# Status labels
+- name: triage
+  color: fbca04
+  description: Needs initial review and categorization
+
+- name: in-progress
+  color: 0e8a16
+  description: Currently being worked on
+
+- name: blocked
+  color: b60205
+  description: Blocked by dependencies or external factors
+
+- name: needs-info
+  color: d876e3
+  description: Needs more information from reporter
+
+- name: wontfix
+  color: ffffff
+  description: Will not be implemented or fixed
+
+- name: duplicate
+  color: cfd3d7
+  description: Duplicate of another issue
+
+- name: stale
+  color: eeeeee
+  description: No recent activity
+
+# Component labels
+- name: plugin
+  color: 5319e7
+  description: Related to a plugin
+
+- name: plugin:plugin-dev
+  color: 5319e7
+  description: plugin-dev plugin
+
+- name: plugin:llmstxt
+  color: 5319e7
+  description: llmstxt plugin
+
+- name: plugin:openclaw-docs
+  color: 5319e7
+  description: openclaw-docs plugin
+
+- name: plugin:high-signal-output
+  color: 5319e7
+  description: high-signal-output plugin
+
+- name: marketplace
+  color: 006b75
+  description: Related to marketplace.json or plugin catalog
+
+- name: ci/cd
+  color: 1d76db
+  description: CI/CD workflows or automation

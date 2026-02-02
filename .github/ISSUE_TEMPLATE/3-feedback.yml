@@ -1,0 +1,52 @@
+name: General Feedback
+description: Share feedback, questions, or suggestions
+title: "[Feedback]: "
+labels: ["feedback", "triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for your feedback! We appreciate all input on how to improve this repository.
+
+  - type: dropdown
+    id: category
+    attributes:
+      label: Feedback Category
+      description: What area does this feedback relate to?
+      options:
+        - Plugin Quality
+        - Documentation
+        - Developer Experience
+        - Testing/CI/CD
+        - Repository Structure
+        - Marketplace
+        - General
+    validations:
+      required: true
+
+  - type: textarea
+    id: feedback
+    attributes:
+      label: Your Feedback
+      description: Please share your thoughts
+      placeholder: I noticed that...
+    validations:
+      required: true
+
+  - type: textarea
+    id: impact
+    attributes:
+      label: Impact
+      description: How does this affect your workflow or experience?
+      placeholder: This makes it difficult to...
+    validations:
+      required: false
+
+  - type: textarea
+    id: suggestions
+    attributes:
+      label: Suggestions
+      description: Do you have any suggestions for improvement?
+      placeholder: It would be better if...
+    validations:
+      required: false
