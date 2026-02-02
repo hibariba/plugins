@@ -17,7 +17,32 @@ What llms.txt URL would you like to convert?
 Example: https://code.claude.com/docs/llms.txt
 ```
 
-### Step 2: Ask Output Location
+### Step 2: Validate Bun Runtime
+
+Check if Bun is installed before proceeding:
+
+```bash
+bun --version
+```
+
+**If Bun is not found:**
+- Report error: "Bun runtime is required but not installed."
+- Provide installation instructions:
+  ```
+  Install Bun:
+  • macOS/Linux: curl -fsSL https://bun.sh/install | bash
+  • Homebrew: brew install oven-sh/bun/bun
+  • Windows: powershell -c "irm bun.sh/install.ps1|iex"
+
+  After installation, restart your terminal and try again.
+  More info: https://bun.sh
+  ```
+- Stop execution (do not proceed with workflow)
+
+**If Bun is found:**
+- Continue silently (no output needed)
+
+### Step 3: Ask Output Location
 
 Use AskUserQuestion:
 - **Question:** "Where should I create the skill?"
@@ -26,7 +51,7 @@ Use AskUserQuestion:
   2. `~/.claude/skills/` - Global, available everywhere
   3. Custom path...
 
-### Step 3: Parse llms.txt and Save to File
+### Step 4: Parse llms.txt and Save to File
 
 ```bash
 bun run ${CLAUDE_PLUGIN_ROOT}/skills/llmstxt-to-skill/scripts/fetch-llmstxt.ts "URL" /tmp/llmstxt-data.json
@@ -34,13 +59,13 @@ bun run ${CLAUDE_PLUGIN_ROOT}/skills/llmstxt-to-skill/scripts/fetch-llmstxt.ts "
 
 This saves the parsed data to a temp file. Read the file to get title and skillName.
 
-### Step 4: Create Directory
+### Step 5: Create Directory
 
 ```bash
 mkdir -p "OUTPUT_PATH/SKILL_NAME/references"
 ```
 
-### Step 5: Fetch References
+### Step 6: Fetch References
 
 ```bash
 bun run ${CLAUDE_PLUGIN_ROOT}/skills/llmstxt-to-skill/scripts/fetch-references.ts /tmp/llmstxt-data.json "OUTPUT_PATH/SKILL_NAME/references"
@@ -48,13 +73,13 @@ bun run ${CLAUDE_PLUGIN_ROOT}/skills/llmstxt-to-skill/scripts/fetch-references.t
 
 Report: "Fetching X references..." then "Fetched X/Y (Z warnings)"
 
-### Step 6: Generate SKILL.md
+### Step 7: Generate SKILL.md
 
 ```bash
 bun run ${CLAUDE_PLUGIN_ROOT}/skills/llmstxt-to-skill/scripts/generate-skill.ts "OUTPUT_PATH/SKILL_NAME" /tmp/llmstxt-data.json
 ```
 
-### Step 7: Cleanup and Report
+### Step 8: Cleanup and Report
 
 ```bash
 rm /tmp/llmstxt-data.json
@@ -74,6 +99,7 @@ The skill will auto-trigger when asking about TOPIC.
 
 | Error | Action |
 |-------|--------|
+| Bun not installed | Show installation instructions, stop workflow |
 | Reference fetch fails | Log warning, continue with others |
 | Invalid llms.txt URL | Report clear error message |
 | Directory not writable | Suggest alternative location |

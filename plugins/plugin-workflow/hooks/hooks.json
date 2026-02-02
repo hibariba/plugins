@@ -1,0 +1,52 @@
+{
+  "description": "Example automation hooks for plugin development workflows",
+  "hooks": {
+    "PostToolUse": [
+      {
+        "description": "Suggest doc updates after plugin component changes",
+        "prompt": "If a file matching patterns ['plugins/*/skills/**/*.md', 'plugins/*/commands/*.md', 'plugins/*/agents/*.md', 'plugins/*/.claude-plugin/plugin.json'] was just written or edited with substantial changes (not just typos), output a brief 1-line suggestion: '💡 Tip: Update docs with doc-generator agent'. Only suggest if the change adds/modifies functionality, not for trivial edits.",
+        "filter": {
+          "toolNames": ["Write", "Edit"],
+          "pathPatterns": [
+            "plugins/*/skills/**/*.md",
+            "plugins/*/commands/*.md",
+            "plugins/*/agents/*.md",
+            "plugins/*/.claude-plugin/plugin.json"
+          ]
+        }
+      },
+      {
+        "description": "Auto-validate marketplace.json after changes",
+        "prompt": "The marketplace.json file was just modified. Run 'jq empty .claude-plugin/marketplace.json' silently. If validation fails, output: '❌ marketplace.json is invalid. Running fix...' then immediately fix the JSON syntax error and re-validate. If valid, output nothing (silent success).",
+        "filter": {
+          "toolNames": ["Write", "Edit"],
+          "pathPatterns": [".claude-plugin/marketplace.json"]
+        }
+      },
+      {
+        "description": "Suggest tests after creating new plugin components",
+        "prompt": "If a new command, skill, or agent file was just created in a plugin (detect by Write tool on .md files in those directories), output: '💡 Tip: Generate tests with test-writer agent'. Only suggest for NEW files, not edits to existing files.",
+        "filter": {
+          "toolNames": ["Write"],
+          "pathPatterns": [
+            "plugins/*/commands/*.md",
+            "plugins/*/skills/**/*.md",
+            "plugins/*/agents/*.md"
+          ]
+        }
+      }
+    ],
+    "Stop": [
+      {
+        "description": "Suggest release workflow when plugin work is complete",
+        "prompt": "Review the conversation. If the user just completed substantial work on a plugin (created components, fixed bugs, added features) and hasn't mentioned releasing, testing, or publishing, output: '💡 Next steps: Would you like me to prepare a release? (I can run tests, update docs, and prepare for publishing)'. Only suggest once per session. Keep it brief and friendly."
+      }
+    ],
+    "SessionStart": [
+      {
+        "description": "Silent health check for plugin repository",
+        "prompt": "Silent check (no output): Scan plugins/ directory. Count total plugins. Check if git hooks are configured (git config core.hooksPath should be .githooks). Store this context mentally but don't output anything unless user asks about plugin health or repository status later in the session."
+      }
+    ]
+  }
+}

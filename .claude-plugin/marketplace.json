@@ -65,6 +65,18 @@
       "source": "./plugins/monorepo",
       "category": "development",
       "homepage": "https://github.com/hibariba/plugins/tree/main/plugins/monorepo"
+    },
+    {
+      "name": "plugin-workflow",
+      "description": "Automated workflow agents for plugin development: test generation, documentation, marketplace management, releases, migrations, and dependency analysis",
+      "version": "1.0.0",
+      "author": {
+        "name": "hibariba",
+        "email": "hibariba@gmail.com"
+      },
+      "source": "./plugins/plugin-workflow",
+      "category": "development",
+      "homepage": "https://github.com/hibariba/plugins/tree/main/plugins/plugin-workflow"
     }
   ]
 }

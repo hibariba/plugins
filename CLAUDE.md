@@ -474,6 +474,51 @@ git commit -m "Remove plugin-name"
 git push
 ```
 
+### Manage Dependencies
+
+Track and validate plugin dependencies across the repository:
+
+```bash
+# Check all plugin dependencies
+bun run scripts/validate-dependencies.ts
+
+# Check with exit code (for CI)
+bun run scripts/validate-dependencies.ts --check
+
+# JSON output only
+bun run scripts/validate-dependencies.ts --json
+
+# Update dependency manifest
+./scripts/update-dependency-manifest.sh
+
+# Manifest is automatically validated on commit via pre-commit hook
+```
+
+**When adding dependencies to a plugin:**
+
+1. Document in README.md:
+   ```markdown
+   ## Requirements
+   - Bun runtime (for TypeScript scripts)
+   - jq (for JSON processing)
+   ```
+
+2. Update manifest:
+   ```bash
+   ./scripts/update-dependency-manifest.sh
+   ```
+
+3. Commit changes:
+   ```bash
+   git add plugins/my-plugin dependencies.json
+   git commit -m "feat: add dependencies to my-plugin"
+   ```
+
+**Pre-commit hook automatically:**
+- Validates dependencies when plugin files change
+- Fails commit if dependencies are missing
+- Provides installation instructions for missing tools
+
 ## Marketplace Configuration
 
 ### Entry Format
@@ -590,9 +635,9 @@ After cloning, enable git hooks:
 git config core.hooksPath .githooks
 ```
 
-This enables pre-commit checks: plugin.json validation, frontmatter linting, gitleaks.
+This enables pre-commit checks: plugin.json validation, frontmatter linting, gitleaks, dependency validation.
 
-**Requires:** `jq`, `gitleaks` (install: `brew install jq gitleaks`)
+**Requires:** `jq`, `gitleaks`, `bun` (install: `brew install jq gitleaks oven-sh/bun/bun`)
 
 **Verify:** `git config core.hooksPath` should return `.githooks`
 
@@ -663,6 +708,8 @@ All plugins in this marketplace should have:
 | **Update externals** | `git submodule update --remote` |
 | **Remove submodule** | `git submodule deinit -f external_plugins/name` |
 | **Run behavioral tests** | `./tests/eval-plugin.sh plugins/name` |
+| **Check dependencies** | `bun run scripts/validate-dependencies.ts` |
+| **Update dep manifest** | `./scripts/update-dependency-manifest.sh` |
 | **Sync issue labels** | `npx github-label-sync --labels .github/labels.yml owner/repo` |
 | **Test workflow locally** | `act issues -e test-event.json` (requires [act](https://github.com/nektos/act)) |
 

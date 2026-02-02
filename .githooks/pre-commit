@@ -26,4 +26,35 @@ if [ $? -ne 0 ]; then
 fi
 
 echo -e "${GREEN}✅ No secrets detected${NC}"
+
+# Check if any plugin files were modified
+PLUGIN_FILES=$(git diff --cached --name-only --diff-filter=ACM | grep -E '^plugins/.*\.(ts|js|json|md)$')
+
+if [ -n "$PLUGIN_FILES" ]; then
+    echo ""
+    echo "Plugin files modified, validating dependencies..."
+
+    # Check if Bun is available
+    if ! command -v bun &> /dev/null; then
+        echo "⚠️  Warning: Bun not installed, skipping dependency validation"
+        echo "   Install Bun: brew install oven-sh/bun/bun"
+    else
+        # Run dependency validation (silent unless errors)
+        bun run scripts/validate-dependencies.ts --check --json > /tmp/dep-check.json 2>&1
+
+        if [ $? -ne 0 ]; then
+            echo -e "${RED}❌ Dependency validation failed${NC}"
+            echo ""
+            echo "Missing dependencies detected. Run for details:"
+            echo "  bun run scripts/validate-dependencies.ts"
+            echo ""
+            echo "To bypass (NOT recommended):"
+            echo "  git commit --no-verify"
+            exit 1
+        fi
+
+        echo -e "${GREEN}✅ All dependencies satisfied${NC}"
+    fi
+fi
+
 exit 0

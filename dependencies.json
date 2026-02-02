@@ -1,0 +1,89 @@
+{
+  "timestamp": "2026-02-02T04:31:51.828Z",
+  "pluginCount": 6,
+  "plugins": [
+    {
+      "name": "monorepo",
+      "version": "0.2.0",
+      "path": "/Users/me/Developer/projects/plugins/plugins/monorepo",
+      "dependencies": [],
+      "scripts": [],
+      "hasHooks": false,
+      "hasMcp": false
+    },
+    {
+      "name": "example-plugin",
+      "version": "1.0.0",
+      "path": "/Users/me/Developer/projects/plugins/plugins/example-plugin",
+      "dependencies": [],
+      "scripts": [],
+      "hasHooks": false,
+      "hasMcp": false
+    },
+    {
+      "name": "retrospective",
+      "version": "0.1.0",
+      "path": "/Users/me/Developer/projects/plugins/plugins/retrospective",
+      "dependencies": [],
+      "scripts": [],
+      "hasHooks": false,
+      "hasMcp": false
+    },
+    {
+      "name": "high-signal-output",
+      "version": "1.0.0",
+      "path": "/Users/me/Developer/projects/plugins/plugins/high-signal-output",
+      "dependencies": [],
+      "scripts": [],
+      "hasHooks": false,
+      "hasMcp": false
+    },
+    {
+      "name": "plugin-workflow",
+      "version": "1.0.0",
+      "path": "/Users/me/Developer/projects/plugins/plugins/plugin-workflow",
+      "dependencies": [],
+      "scripts": [],
+      "hasHooks": true,
+      "hasMcp": false
+    },
+    {
+      "name": "llmstxt",
+      "version": "1.0.0",
+      "path": "/Users/me/Developer/projects/plugins/plugins/llmstxt",
+      "dependencies": [
+        {
+          "type": "runtime",
+          "name": "bun",
+          "version": "1.3.6",
+          "required": true,
+          "satisfied": true,
+          "checkCommand": "bun --version"
+        },
+        {
+          "type": "network",
+          "name": "network-access",
+          "required": true,
+          "satisfied": true,
+          "checkCommand": "ping -c 1 example.com"
+        }
+      ],
+      "scripts": [
+        "skills/llmstxt-to-skill/scripts/generate-skill.ts",
+        "skills/llmstxt-to-skill/scripts/fetch-llmstxt.ts",
+        "skills/llmstxt-to-skill/scripts/fetch-references.ts"
+      ],
+      "hasHooks": false,
+      "hasMcp": false
+    }
+  ],
+  "summary": {
+    "totalDependencies": 2,
+    "satisfied": 2,
+    "missing": 0,
+    "runtimes": [
+      "bun"
+    ],
+    "systemTools": []
+  }
+}

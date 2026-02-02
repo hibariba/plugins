@@ -139,6 +139,44 @@ Add entry to `/.claude-plugin/marketplace.json`:
 }
 ```
 
+### 6. Document Dependencies (If Any)
+
+If your plugin requires external tools or runtimes:
+
+**In README.md:**
+```markdown
+## Requirements
+
+- Bun runtime (for TypeScript scripts)
+- jq (for JSON processing)
+- Network access (for API calls)
+```
+
+**In plugin.json:** (optional)
+```json
+{
+  "requirements": {
+    "runtime": ["bun"],
+    "system": ["jq"],
+    "network": true
+  }
+}
+```
+
+**Validate dependencies:**
+```bash
+# From repository root
+bun run scripts/validate-dependencies.ts
+
+# Update manifest after changes
+./scripts/update-dependency-manifest.sh
+```
+
+The repository automatically:
+- Validates dependencies on commit (pre-commit hook)
+- Tracks dependencies in `dependencies.json` manifest
+- Warns users about missing tools
+
 ## Component Types
 
 This plugin demonstrates the two most common components. For advanced use cases:
