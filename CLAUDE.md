@@ -23,7 +23,7 @@ The fastest way to create a plugin:
 
 4. **Test locally:**
    ```bash
-   claude --plugin-dir /Users/me/Developer/projects/plugins/plugins/my-new-plugin
+   claude --plugin-dir plugins/my-new-plugin
    ```
 
 5. **Add to marketplace:**
@@ -240,11 +240,34 @@ hooks/
 └── my-hook.ts              # Hook implementation
 ```
 
+**Configuration Format:**
+
+Plugin hooks in `hooks/hooks.json` use wrapper format:
+```json
+{
+  "description": "Brief explanation (optional)",
+  "hooks": {
+    "PreToolUse": [...],
+    "Stop": [...]
+  }
+}
+```
+
+User settings in `.claude/settings.json` use direct format (no wrapper):
+```json
+{
+  "PreToolUse": [...],
+  "Stop": [...]
+}
+```
+
 **Best Practices:**
 - Use for validation, logging, notifications
 - Keep hooks fast (they block execution)
 - Use prompt-based hooks for complex validation
 - Handle errors gracefully
+
+**Important:** Hooks load at session start. After editing hook configuration, restart Claude Code for changes to take effect.
 
 **Use When:**
 - Need validation before/after tool use
@@ -287,10 +310,10 @@ hooks/
 
 ```bash
 # Test plugin installation
-claude --plugin-dir /Users/me/Developer/projects/plugins/plugins/my-plugin
+claude --plugin-dir plugins/my-plugin
 
 # Test with debug mode for verbose output
-claude --debug --plugin-dir /Users/me/Developer/projects/plugins/plugins/my-plugin
+claude --debug --plugin-dir plugins/my-plugin
 
 # Test specific components:
 # - Skills: Ask questions with trigger phrases
@@ -312,7 +335,7 @@ jq empty .claude-plugin/marketplace.json
 
 ### Behavioral Evaluation
 
-Beyond structural validation, test plugin behavior with CC as judge:
+Beyond structural validation, test plugin behavior with CC as judge. For script development, see [Script Development Patterns](#script-development-patterns) for best practices.
 
 ```bash
 ./tests/eval-plugin.sh plugins/my-plugin           # Run behavioral tests
@@ -368,7 +391,7 @@ cd plugins/my-plugin
 # Remove unneeded directories, customize what remains
 
 # 4. Test locally
-claude --plugin-dir /Users/me/Developer/projects/plugins/plugins/my-plugin
+claude --plugin-dir plugins/my-plugin
 
 # 5. Add to marketplace
 # Edit /.claude-plugin/marketplace.json
