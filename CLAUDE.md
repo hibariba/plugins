@@ -514,6 +514,8 @@ Templates enforce structure and collect required information upfront.
 - Provide all requested information in the template
 - Use descriptive titles: `[Bug]: Login fails on Safari` not `bug`
 - Link PRs to issues using `Fixes #123` or `Closes #456`
+- **Create comprehensive reports:** Include all context (steps to reproduce, environment details, error messages, relevant code snippets) directly in the issue body
+- **Handle attachments properly:** Attach files (screenshots, logs, sample data) directly to the GitHub issue using drag-and-drop or the attachment button. **Never commit attachments to the repository** - they belong in the issue tracker, not version control
 
 ### For Maintainers
 

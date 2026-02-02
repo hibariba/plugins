@@ -66,23 +66,23 @@
 
 # Component labels
 - name: plugin
-  color: 5319e7
+  color: "5319e7"
   description: Related to a plugin
 
 - name: plugin:plugin-dev
-  color: 5319e7
+  color: "5319e7"
   description: plugin-dev plugin
 
 - name: plugin:llmstxt
-  color: 5319e7
+  color: "5319e7"
   description: llmstxt plugin
 
 - name: plugin:openclaw-docs
-  color: 5319e7
+  color: "5319e7"
   description: openclaw-docs plugin
 
 - name: plugin:high-signal-output
-  color: 5319e7
+  color: "5319e7"
   description: high-signal-output plugin
 
 - name: marketplace
