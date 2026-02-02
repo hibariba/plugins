@@ -1,0 +1,9 @@
+{
+  "name": "monorepo",
+  "version": "0.2.0",
+  "description": "Monorepo architecture guidance for Python, TypeScript, and polyglot codebases—from decision support to migration to implementation",
+  "author": {
+    "name": "hibariba",
+    "email": "hibariba@gmail.com"
+  }
+}

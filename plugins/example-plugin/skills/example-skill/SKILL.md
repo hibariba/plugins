@@ -32,7 +32,7 @@ This plugin demonstrates the two most common components. To create your own:
 
 5. **Test locally:**
    ```bash
-   cc --plugin-dir plugins/my-plugin
+   claude --plugin-dir plugins/my-plugin
    ```
 
 ## Component Types

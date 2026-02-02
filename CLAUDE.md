@@ -23,7 +23,7 @@ The fastest way to create a plugin:
 
 4. **Test locally:**
    ```bash
-   cc --plugin-dir /Users/me/Developer/projects/plugins/plugins/my-new-plugin
+   claude --plugin-dir /Users/me/Developer/projects/plugins/plugins/my-new-plugin
    ```
 
 5. **Add to marketplace:**
@@ -287,10 +287,10 @@ hooks/
 
 ```bash
 # Test plugin installation
-cc --plugin-dir /Users/me/Developer/projects/plugins/plugins/my-plugin
+claude --plugin-dir /Users/me/Developer/projects/plugins/plugins/my-plugin
 
 # Test with debug mode for verbose output
-cc --debug --plugin-dir /Users/me/Developer/projects/plugins/plugins/my-plugin
+claude --debug --plugin-dir /Users/me/Developer/projects/plugins/plugins/my-plugin
 
 # Test specific components:
 # - Skills: Ask questions with trigger phrases
@@ -368,7 +368,7 @@ cd plugins/my-plugin
 # Remove unneeded directories, customize what remains
 
 # 4. Test locally
-cc --plugin-dir /Users/me/Developer/projects/plugins/plugins/my-plugin
+claude --plugin-dir /Users/me/Developer/projects/plugins/plugins/my-plugin
 
 # 5. Add to marketplace
 # Edit /.claude-plugin/marketplace.json
@@ -632,8 +632,8 @@ All plugins in this marketplace should have:
 | Task | Command |
 |------|---------|
 | **Create plugin** | `cp -r plugins/example-plugin plugins/name` |
-| **Test plugin** | `cc --plugin-dir plugins/name` |
-| **Test with debug** | `cc --debug --plugin-dir plugins/name` |
+| **Test plugin** | `claude --plugin-dir plugins/name` |
+| **Test with debug** | `claude --debug --plugin-dir plugins/name` |
 | **Validate plugin.json** | `jq empty plugins/name/.claude-plugin/plugin.json` |
 | **Validate marketplace** | `jq empty .claude-plugin/marketplace.json` |
 | **Add external plugin** | `git submodule add URL external_plugins/name` |

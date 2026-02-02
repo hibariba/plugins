@@ -11,7 +11,7 @@ A working "hello world" plugin demonstrating the two most common plugin componen
 /plugin install example-plugin@hibariba-plugins
 
 # Or test locally
-cc --plugin-dir /Users/me/dev/projects/plugins/plugins/example-plugin
+claude --plugin-dir /Users/me/dev/projects/plugins/plugins/example-plugin
 ```
 
 ### Try It Out
@@ -115,7 +115,7 @@ rm -rf commands/
 ### 4. Test Locally
 
 ```bash
-cc --plugin-dir /path/to/your/plugin
+claude --plugin-dir /path/to/your/plugin
 
 # Test skill: Ask questions with your trigger phrases
 # Test commands: Run /your-plugin:your-command
@@ -212,7 +212,7 @@ After customization:
 
 2. **Test locally:**
    ```bash
-   cc --plugin-dir /path/to/your-plugin
+   claude --plugin-dir /path/to/your-plugin
    ```
 
 3. **Verify components load:**

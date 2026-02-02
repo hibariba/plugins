@@ -50,7 +50,7 @@ retrospective/
 
 ```bash
 # Test locally
-cc --plugin-dir /path/to/plugins/retrospective
+claude --plugin-dir /path/to/plugins/retrospective
 
 # Or copy to Claude Code plugins directory
 cp -r retrospective ~/.claude-plugin/

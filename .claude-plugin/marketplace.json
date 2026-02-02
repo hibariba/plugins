@@ -4,7 +4,7 @@
   "description": "Personal collection of Claude Code plugins - custom tools and curated third-party extensions",
   "owner": {
     "name": "hibariba",
-    "email": "your-email@example.com"
+    "email": "hibariba@gmail.com"
   },
   "plugins": [
     {
@@ -13,7 +13,7 @@
       "version": "0.1.0",
       "author": {
         "name": "hibariba",
-        "email": "your-email@example.com"
+        "email": "hibariba@gmail.com"
       },
       "source": "./plugins/example-plugin",
       "category": "learning",
@@ -53,6 +53,18 @@
       "source": "./plugins/high-signal-output",
       "category": "productivity",
       "homepage": "https://github.com/hibariba/plugins/tree/main/plugins/high-signal-output"
+    },
+    {
+      "name": "monorepo",
+      "description": "Monorepo architecture guidance for Python, TypeScript, and polyglot codebases—from decision support to migration to implementation",
+      "version": "0.2.0",
+      "author": {
+        "name": "hibariba",
+        "email": "hibariba@gmail.com"
+      },
+      "source": "./plugins/monorepo",
+      "category": "development",
+      "homepage": "https://github.com/hibariba/plugins/tree/main/plugins/monorepo"
     }
   ]
 }
