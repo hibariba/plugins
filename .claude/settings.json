@@ -1,0 +1,60 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(ls:*)",
+      "Bash(curl:*)",
+      "Bash(tr:*)",
+      "Bash(chmod:*)",
+      "Bash(./scripts/generate-skill-index.sh:*)",
+      "Bash(./.claude/skills/openclaw/scripts/generate-skill-index.sh:*)",
+      "Bash(./.claude/skills/openclaw/scripts/update-openclaw-docs.sh:*)",
+      "Bash(./.claude/skills/openclaw-docs/scripts/update-openclaw-docs.sh:*)",
+      "Bash(for f in skill-*.md)",
+      "WebSearch",
+      "Bash(find:*)",
+      "Bash(tree:*)",
+      "Bash(ruby:*)",
+      "Bash(wc:*)",
+      "Bash(gh issue create:*)",
+      "Bash(gh label:*)",
+      "Bash(git remote:*)",
+      "Bash(npx github-label-sync:*)",
+      "Bash(gh issue close:*)",
+      "Bash(for plugin in plugins/*/)",
+      "Bash(do cp LICENSE \"$plugin/LICENSE\")",
+      "Bash(done)",
+      "Bash(./tests/validate-plugin.sh:*)",
+      "Bash(jq:*)"
+    ]
+  },
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Edit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash -c 'INPUT=$(cat); file_path=$(echo \"$INPUT\" | jq -r \".tool_input.file_path // empty\"); if [[ \"$file_path\" == */plugins/*/.claude-plugin/plugin.json ]]; then plugin_dir=\"${file_path%/.claude-plugin/plugin.json}\"; echo \"Validating plugin at $plugin_dir...\"; ./tests/validate-plugin.sh \"$plugin_dir\"; fi'",
+            "timeout": 30,
+            "statusMessage": "Validating plugin.json..."
+          }
+        ]
+      }
+    ],
+    "PreToolUse": [
+      {
+        "matcher": "Edit|Write",
+        "hooks": [
+          {
+            "type": "prompt",
+            "prompt": "You are about to edit a file. Context: $ARGUMENTS\n\nIf the file path is .claude-plugin/marketplace.json, verify:\n1. The edit maintains valid JSON structure\n2. All required fields are present (name, description, version, author, source, category)\n3. The source path matches an actual plugin directory\n4. No duplicate plugin names\n\nFor marketplace.json edits, respond with {\"ok\": false, \"reason\": \"explanation\"} to block if validation fails. For other files, respond with {\"ok\": true}.\n\nAfter marketplace.json edits are approved, Claude should run: jq empty .claude-plugin/marketplace.json",
+            "timeout": 30
+          }
+        ]
+      }
+    ]
+  },
+  "enabledPlugins": {
+    "monorepo@hibariba-plugins": true
+  }
+}
